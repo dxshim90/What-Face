@@ -27,7 +27,27 @@ const particlesOptions = {
 class App extends React.Component {
   state = {
     input: "",
-    imageURL: ""
+    imageURL: "",
+    box: {}
+  };
+
+  calculateFaceLocation = data => {
+    const face = data.outputs[0].data.regions[0].region_info.bounding_box;
+    const image = document.getElementById("inputimage");
+    const width = Number(image.width);
+    const height = Number(image.height);
+    return {
+      leftCol: face.left_col * width,
+      topRow: face.top_row * height,
+      rightCol: width - face.right_col * width,
+      bottomRow: height - face.bottom_row * height
+    };
+  };
+
+  displayFaceBox = box => {
+    this.setState({
+      box
+    });
   };
 
   onInputChnage = e => {
@@ -40,16 +60,12 @@ class App extends React.Component {
     this.setState({
       imageURL: this.state.input
     });
-    app.models.predict(Clarifai.FACE_DETECT_MODEL, this.state.input).then(
-      function(response) {
-        console.log(
-          response.outputs[0].data.regions[0].region_info.bounding_box
-        );
-      },
-      function(err) {
-        // there was an error
-      }
-    );
+    app.models
+      .predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
+      .then(response =>
+        this.displayFaceBox(this.calculateFaceLocation(response))
+      )
+      .catch(err => console.log(err));
   };
 
   render() {
@@ -63,7 +79,7 @@ class App extends React.Component {
           onInputChnage={this.onInputChnage}
           onSubmit={this.onSubmit}
         />
-        <FaceRecognition imageURL={this.state.imageURL} />
+        <FaceRecognition box={this.state.box} imageURL={this.state.imageURL} />
       </div>
     );
   }
