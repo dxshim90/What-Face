@@ -1,9 +1,23 @@
 import React from "react";
 
-const Navigation = () => {
+const Navigation = ({ onRouteChange, isSignedIn }) => {
   return (
     <nav style={{ display: "flex", justifyContent: "flex-end" }}>
-      <p className="f3 link dim black underline pa3 pointer">Sign Out</p>
+      {isSignedIn ? (
+        <p
+          onClick={() => onRouteChange("signout")}
+          className="f3 link dim black underline pa3 pointer"
+        >
+          Sign Out
+        </p>
+      ) : (
+        <p
+          onClick={() => onRouteChange("register")}
+          className="f3 link dim black underline pa3 pointer"
+        >
+          Sign UP
+        </p>
+      )}
     </nav>
   );
 };
