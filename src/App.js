@@ -81,7 +81,7 @@ class App extends React.Component {
     this.setState({
       imageURL: this.state.input
     });
-    fetch("http://localhost:3000/imageurl", {
+    fetch("https://mighty-anchorage-48522.herokuapp.com/imageurl", {
       method: "post",
       headers: {
         "content-type": "application/json"
@@ -93,7 +93,7 @@ class App extends React.Component {
       .then(response => response.json())
       .then(response => {
         if (response) {
-          fetch("http://localhost:3000/image", {
+          fetch("https://mighty-anchorage-48522.herokuapp.com/image", {
             method: "put",
             headers: {
               "content-type": "application/json"
@@ -108,7 +108,6 @@ class App extends React.Component {
             })
             .catch(err => console.log(err));
         }
-        console.log(response);
         this.displayFaceBox(this.calculateFaceLocation(response));
       })
       .catch(err => console.log(err));
