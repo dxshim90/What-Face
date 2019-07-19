@@ -25,22 +25,19 @@ class Register extends React.Component {
     });
   };
 
-  onSubmit = e => {
-    e.preventDefault();
+  onSubmit = () => {
     fetch("http://localhost:3000/register", {
       method: "post",
-      headers: {
-        "content-type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name: this.state.name,
         email: this.state.email,
-        password: this.state.password
+        password: this.state.password,
+        name: this.state.name
       })
     })
       .then(response => response.json())
       .then(user => {
-        if (user.id) {
+        if (user) {
           console.log(user);
           this.props.loadUser(user);
           this.props.onRouteChange("home");
@@ -50,9 +47,9 @@ class Register extends React.Component {
 
   render() {
     return (
-      <article className="br5 ba dark-gray b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
+      <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
         <main className="pa4 black-80">
-          <form className="measure">
+          <div className="measure">
             <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
               <legend className="f1 fw6 ph0 mh0">Register</legend>
               <div className="mt3">
@@ -94,14 +91,13 @@ class Register extends React.Component {
             </fieldset>
             <div className="">
               <input
+                onClick={this.onSubmit}
                 className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
                 type="submit"
                 value="Register"
-                onClick={this.onSubmit}
               />
             </div>
-            <div className="lh-copy mt3" />
-          </form>
+          </div>
         </main>
       </article>
     );
